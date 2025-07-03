@@ -2,25 +2,27 @@ package com.probe.controller;
 
 
 import com.probe.model.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.probe.service.ProbeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProbeController {
+    @Autowired
+    ProbeService probeService;
+
     @GetMapping("/mesh")
     Mesh getCurrentMeshState() {
-        return new Mesh(0,0,0,0, Direction.RIGHT);
+        return probeService.getCurrentMeshState();
     }
 
     @PostMapping("/command")
-    Command sendCommandToProbe(@RequestParam Command command) {
-        return Command.MOVE_RIGHT;
+    Command sendCommandToProbe(@RequestBody Command command) {
+        return probeService.sendCommandToProbe(command);
     }
 
     @PostMapping("/hurdle")
-    Position addHurdle(int x, int y) {
-        return new Position(0,0);
+    Position addHurdle(@RequestBody Position position) {
+        return probeService.addHurdle(position);
     }
 }
